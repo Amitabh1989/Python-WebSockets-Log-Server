@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real time app</title>
+</head>
+<body>
+    <h1>Count Page</h1>
+    <script>
+        var ws = new WebSocket('ws://localhost:8001/ws/sc/');
+
+        {% comment %} ws.onopen = function() {
+            console.log('WebSocket is open now.');
+            ws.send(JSON.stringify({ message: 'Hello from the client!' }));
+        };{% endcomment %}
+        
+        
+        {% comment %} Executes when the server responds {% endcomment %}
+        {% comment %} ws.onmessage = function(event) {
+            console.log('Raw message from server:', event.data);
+            try {
+                var data = JSON.parse(event.data);
+                console.log('Parsed data:', data);
+            } catch (error) {
+                console.error('Error parsing JSON:', error);
+            }
+        };
+
+        ws.onerror = function(event) {
+            console.log('WebSocket error: ', event);
+        };
+
+        ws.onclose = function(event) {
+            console.log('WebSocket is closed now.', event);
+        }; {% endcomment %}
+
+        ws.addEventListener('open', function(event) {
+            console.log('WebSocket is open now.', event);
+            ws.send(JSON.stringify({ message: 'Hello from the client!' }));
+        });
+
+        ws.addEventListener('message', function(event) {
+            console.log('WebSocket is receiving message from server now.', event);
+            var data = JSON.parse(event.data);
+            console.log('Received data:', data);
+        });
+
+        ws.addEventListener('error', function(event) {
+            console.log('WebSocket error', event);
+        });
+
+        ws.addEventListener('close', function(event) {
+            console.log('WebSocket is closed now.', event);
+        });
+
+    </script>
+</body>
+</html>

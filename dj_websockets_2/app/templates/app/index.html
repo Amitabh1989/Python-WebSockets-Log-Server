@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real time app</title>
+</head>
+<body>
+    <h1>Count Page </h1>
+    <h2 id="ct">
+
+    </h2>
+    <script>
+        var ws = new WebSocket('ws://localhost:8001/ws/sc/');
+        {% comment %} var ws = new WebSocket('ws://localhost:8001/ws/log/'); {% endcomment %}
+
+
+        ws.onopen = function() {
+            console.log('WebSocket is open now.');
+            ws.send(JSON.stringify({ message: 'Hello from the client!' }));
+        };
+        
+        
+        // Executes when the server responds
+        ws.onmessage = function(event) {
+            console.log('Raw message from server onmessage:', event.data);
+            try {
+                var data = JSON.parse(event.data);
+                document.getElementById('ct').innerText = event.data;
+            } catch (error) {
+                console.error('Error parsing JSON:', error);
+            }
+        };
+
+        ws.onerror = function(event) {
+            console.log('WebSocket error: ', event);
+        };
+
+        ws.onclose = function(event) {
+            console.log('WebSocket is closed now.', event);
+        }; 
+
+    </script>
+</body>
+</html>
