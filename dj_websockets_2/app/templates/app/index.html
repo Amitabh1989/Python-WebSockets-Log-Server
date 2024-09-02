@@ -6,18 +6,21 @@
     <title>Real time app</title>
 </head>
 <body>
-    <h1>Count Page </h1>
-    <h2 id="ct">
+    <h1>Live logs via websockets, awesome work Amitabh! </h1>
+    <h4 id="ct" style="font-family: 'Courier New', Courier, monospace;">
 
-    </h2>
+    </h4>
     <script>
-        var ws = new WebSocket('ws://localhost:8001/ws/sc/');
-        {% comment %} var ws = new WebSocket('ws://localhost:8001/ws/log/'); {% endcomment %}
+        //var ws = new WebSocket('ws://localhost:8001/ws/sc/');
+        var ws = new WebSocket('ws://localhost:8001/ws/log/');
 
 
         ws.onopen = function() {
             console.log('WebSocket is open now.');
-            ws.send(JSON.stringify({ message: 'Hello from the client!' }));
+            ws.send(JSON.stringify({
+                message: "Hello from the client!",
+                script_path : "C:\\GitHub\\Django-WebSockets\\dj_websockets_2\\app\\user_scripts\\test_logging.py"
+            }));
         };
         
         
@@ -26,7 +29,7 @@
             console.log('Raw message from server onmessage:', event.data);
             try {
                 var data = JSON.parse(event.data);
-                document.getElementById('ct').innerText = event.data;
+                document.getElementById('ct').innerText += data.log_lines + "\n";
             } catch (error) {
                 console.error('Error parsing JSON:', error);
             }
