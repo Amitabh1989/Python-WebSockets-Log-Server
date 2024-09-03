@@ -16,6 +16,9 @@ def main():
     # File handler for logging to a file
     file_handler = logging.FileHandler("HISTORYlistener.log")
     file_handler.setFormatter(formatter)
+    file_handler.flush = (
+        lambda: None
+    )  # Add flush method to ensure logs are written immediately
     logger.addHandler(file_handler)
 
     # Stream handler for logging to the console
@@ -23,9 +26,9 @@ def main():
     stream_handler.setFormatter(formatter)
     logger.addHandler(stream_handler)
 
-    for i in range(100):
+    for i in range(200):
         logger.info(f"Hello, world! We are live logging via websockets {i}")
-        time.sleep(0.1)
+        time.sleep(0.2)
 
 
 if __name__ == "__main__":
